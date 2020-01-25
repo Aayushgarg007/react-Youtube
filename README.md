@@ -1,4 +1,4 @@
-# reactYoutubeAPI
+# react-Youtube
 
 ### Getting Started
 
