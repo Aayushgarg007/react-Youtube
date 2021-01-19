@@ -5,15 +5,11 @@ import React, {Component} from 'react'; //corelib, manage component
 import ReactDOM from 'react-dom'; //domlib
 import SearchBar from './components/search_bar'; //relative path is required
 import VideoList from './components/video_list';
-import VideoDetail from './components/video_detail'
+import VideoDetail from './components/video_detail';
+import API_KEY from "../apikey";
 
 //for API search
-import YTSearch from 'youtube-api-search'
-
-const API_KEY = `AIzaSyB7ceLcVP5EK_kY4T2ixR65uLbpCmITf-M`
-
- //Demo video seach
-
+import searchYoutube from 'youtube-api-v3-search';
 
 //Creating a new component that returns html
 class App extends Component{
@@ -23,16 +19,25 @@ class App extends Component{
             videos: [],
             selectedVideo: null
         };
-        this.videoSearch('Linus Tech Tips')
+        this.videoSearch('Tanmay Bhat')
     }
 
     videoSearch(term){
-        YTSearch({key: API_KEY, term: term}, (videos) => {
+        const options = {
+            q: term,
+            // part:'snippet',
+            type: 'video'
+        };
+
+        searchYoutube(API_KEY, options, (error, videos) => {
             //this.setState({videos: videos});
             //for ES6
+            if(error)
+                console.error(error);
+            console.log(videos.items);
             this.setState({
-                videos: videos,
-                selectedVideo: videos[0]
+                videos: videos.items,
+                selectedVideo: videos.items[0]
             });
         });
     }
@@ -55,7 +60,4 @@ class App extends Component{
     }
 }
 
-//instance of component class
-//<App />
-//update DOM
 ReactDOM.render(<App />, document.querySelector('.container'));
